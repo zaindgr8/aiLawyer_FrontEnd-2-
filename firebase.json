@@ -1,0 +1,17 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": {
+      "indexes": [
+        {
+          "collectionGroup": "chats",
+          "queryScope": "COLLECTION",
+          "fields": [
+            { "fieldPath": "userId", "order": "ASCENDING" },
+            { "fieldPath": "updatedAt", "order": "DESCENDING" }
+          ]
+        }
+      ]
+    }
+  }
+}

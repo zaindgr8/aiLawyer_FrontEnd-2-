@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backend Connection Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .test-container {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      h1 {
+        color: #333;
+      }
+      button {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      #result,
+      #chat-result {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+      }
+      .code {
+        background-color: #f4f4f4;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Backend Connection Test</h1>
+
+    <div class="test-container">
+      <h2>1. Test Health Endpoint</h2>
+      <p>
+        This will test if we can connect to the backend API at
+        <code>http://localhost:8000/api/health</code>
+      </p>
+      <button onclick="testBackendConnection()">Test Backend Connection</button>
+      <div id="result">Click the button to test connection</div>
+    </div>
+
+    <div class="test-container">
+      <h2>2. Test Chat Endpoint</h2>
+      <p>
+        This will test if we can connect to the chat API at
+        <code>http://localhost:8000/api/chat</code>
+      </p>
+      <button onclick="testChatEndpoint()">Test Chat Endpoint</button>
+      <div id="chat-result">Click the button to test connection</div>
+    </div>
+
+    <div class="test-container">
+      <h2>Troubleshooting</h2>
+      <p>If you cannot connect to the backend, check the following:</p>
+      <ol>
+        <li>Is your Python FastAPI backend running?</li>
+        <li>
+          Is it running on port 8000? If not, you need to update the API_URL in
+          AppContext.js
+        </li>
+        <li>
+          Does your backend have CORS enabled? Your FastAPI code should include
+          CORS middleware.
+        </li>
+      </ol>
+
+      <h3>Example FastAPI CORS Setup:</h3>
+      <pre class="code">
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For development only! Restrict this in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.post("/api/chat")
+async def chat(request: dict):
+    # Your chat logic here
+    return {"response": "This is a test response", "thread_id": "test123"}
+    </pre
+      >
+    </div>
+
+    <script src="test-backend.js"></script>
+  </body>
+</html>
