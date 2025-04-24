@@ -24,6 +24,23 @@ export default function TopicsSection() {
   const [isMobile, setIsMobile] = useState(false);
   const topicsContainerRef = useRef(null);
 
+  // More detailed debugging of user auth state
+  useEffect(() => {
+    if (isClient && mounted) {
+      console.log("TopicsSection - Auth State:", {
+        isLoggedIn: !!user,
+        userId: user?.uid,
+        userEmail: user?.email,
+        recentChatsLength: recentChats?.length || 0,
+      });
+
+      // Force a refresh of recent chats if user is logged in
+      if (user) {
+        loadRecentChats();
+      }
+    }
+  }, [user, isClient, mounted, loadRecentChats]);
+
   // Safe client-side only mounting
   useEffect(() => {
     setMounted(true);
@@ -70,18 +87,6 @@ export default function TopicsSection() {
     // Cleanup
     return () => window.removeEventListener("resize", checkIfMobile);
   }, [isClient, mounted]);
-
-  // Add console log to debug user state
-  useEffect(() => {
-    if (isClient && mounted) {
-      console.log("TopicsSection - User auth state:", {
-        isLoggedIn: !!user,
-        userId: user?.uid,
-        email: user?.email,
-        recentChatsCount: recentChats?.length || 0,
-      });
-    }
-  }, [user, isClient, mounted, recentChats]);
 
   const loadTopics = () => {
     const topicsData = {

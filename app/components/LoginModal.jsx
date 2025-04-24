@@ -40,17 +40,19 @@ export default function LoginModal() {
     }
   }, [authError]);
 
+  // Auto-close login modal when user is already logged in
+  useEffect(() => {
+    // If user is already logged in and modal is shown, close it
+    if (user && showLoginModal && mounted) {
+      setShowLoginModal(false);
+    }
+  }, [user, showLoginModal, setShowLoginModal, mounted]);
+
   // Don't render anything during SSR or before mounting
   if (!isClient || !mounted) return null;
 
   // Don't render the modal if it's not meant to be shown
   if (!showLoginModal) return null;
-
-  // If user is already logged in, we can close the modal
-  if (user && showLoginModal) {
-    setShowLoginModal(false);
-    return null;
-  }
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

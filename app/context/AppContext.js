@@ -106,7 +106,7 @@ export function AppProvider({ children }) {
       };
 
       testAccess();
-    } else {
+    } else if (isClient) {
       console.log("AppContext - No authenticated user detected");
       setRecentChats([]);
       setActiveChatId(null);
@@ -160,14 +160,22 @@ export function AppProvider({ children }) {
 
   // Load recent chats
   const loadRecentChats = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log("loadRecentChats: No user, skipping chat loading");
+      return;
+    }
 
     try {
       console.log("Loading recent chats for user:", user.uid);
       setIsLoadingChats(true);
-      const chats = await getRecentChats(user.uid);
+      const chats = await getRecentChats(user.uid, 10); // Increased limit to 10
       console.log("Retrieved chats from Firebase:", chats);
       setRecentChats(chats);
+
+      // If we have chats but no active chat, set the most recent one as active
+      if (chats.length > 0 && !activeChatId) {
+        switchChat(chats[0].id);
+      }
     } catch (error) {
       console.error("Error loading recent chats:", error);
     } finally {

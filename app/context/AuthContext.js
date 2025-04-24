@@ -10,6 +10,8 @@ import {
   GoogleAuthProvider,
   updateProfile,
   sendPasswordResetEmail,
+  setPersistence,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
 
@@ -46,6 +48,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
     try {
       console.log("Attempting to log in user:", { email });
+      await setPersistence(auth, browserLocalPersistence);
       const result = await signInWithEmailAndPassword(auth, email, password);
       return result.user;
     } catch (error) {
@@ -60,6 +63,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
     try {
       console.log("Attempting Google sign in");
+      await setPersistence(auth, browserLocalPersistence);
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       return result.user;
